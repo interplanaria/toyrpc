@@ -36,18 +36,21 @@ const Toyrpc = require('toyrpc')
 const toychain = new Toychain({ xpriv: <xpriv> })
 
 // Instantiate RPC for the toychain
-const rpc = Toyrpc.init({
+const rpc = new Toyrpc({
   chain: toychain,
   readonly: true,
   port: 3000,
   protocol: "http"
 })
+
+// Listen
+rpc.listen()
 ```
 
-Here's the full syntax for `init`:
+Here's the full syntax for the constructor:
 
 ```
-Toyrpc.init({
+const rpc = new Toyrpc({
   chain: <toychain object>,
   readonly: <true|false (default false)>,
   port: <the port to serve rpc from>,
@@ -59,6 +62,12 @@ Toyrpc.init({
 - `readonly`: if set to `true`, you can make this RPC endpoint only readonly. All "write" actions (`clone`, `add`, `push`, and `reset`) are blocked. When readonly mode, the only allowed functions are `count` and `get`.
 - `port`: The port to serve RPC from
 - `protocol`: Choose to serve over HTTP or TCP. The default is HTTP.
+
+Once initialized, you can listen:
+
+```
+rpc.listen()
+```
 
 ---
 
@@ -74,13 +83,13 @@ POST http://localhost:3012
 {
   "jsonrpc": "2.0",
   "method": "add",
-  "params": [{
+  "params": {
     "v": 1,
     "out": [{
       "o0": "OP_0", "o1": "OP_RETURN", "s2": "hello toy"
     }],
     "edge": { "in": 1, "out": 2 }
-  }],
+  },
   "id": 0
 }
 ```
